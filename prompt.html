@@ -28,6 +28,7 @@
 
     <!-- Styles for the application -->
     <link rel="stylesheet" href="./styles/viewer.css" type="text/css" />
+    <link rel="stylesheet" href="./styles/prompt.css" type="text/css" />
 
     <!-- Application icon -->
     <link rel="icon" href="./images/favicon.png" type="image/png" />
@@ -64,7 +65,9 @@
                   name="search"
                   placeholder="Find destination on campus......."
                 />
-                <img height="20" src="./images/search.png" />
+                <a href="signup.html">
+                  <img height="20" src="./images/search.png" />
+                </a>
               </div>
             </form>
             <li class="nav-item">
@@ -72,7 +75,10 @@
             </li>
           </ul>
         </div>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="collapsibleNavbar"
+        >
           <div class="form-inline my-2 my-lg-0">
             <a class="sign_button" href="signup.html">Sign up</a>
             <a class="log_button" href="login.html">Login</a>
@@ -80,7 +86,115 @@
         </div>
       </div>
     </nav>
-   
+    <div id="pnl-basemap" class="card panel panel-tool">
+      <div class="card-header">
+        Base layer
+        <span class="pull-right clickable close-icon" data-effect="fadeOut"
+          ><i class="fa fa-times"></i
+        ></span>
+      </div>
+      <div class="card-body">
+        <form>
+          <div class="form-group">
+            <div class="form-check">
+              <input
+                id="base-osm"
+                type="radio"
+                name="basemap"
+                class="form-check-input"
+                value="osm"
+                checked
+              /><label for="base-osm">OpenStreetMap</label>
+            </div>
+            <div class="form-check">
+              <input
+                id="base-esri-natgeo"
+                type="radio"
+                name="basemap"
+                class="form-check-input"
+                value="arcgis"
+              /><label for="base-esri-natgeo">3D view</label>
+            </div>
+            <div class="form-check">
+              <input
+                id="base-otm"
+                type="radio"
+                name="basemap"
+                class="form-check-input"
+                value="otm"
+              /><label for="base-otm">OpenTopoMap</label>
+            </div>
+            <div class="form-check">
+              <input
+                id="base-esri-wtm"
+                type="radio"
+                name="basemap"
+                class="form-check-input"
+                value="esri_wtm"
+              /><label for="base-esri-wtm">ESRI World Topo Map</label>
+            </div>
+            <div class="form-check">
+              <input
+                id="base-esri-natgeo"
+                type="radio"
+                name="basemap"
+                class="form-check-input"
+                value="esri_natgeo"
+              /><label for="base-esri-natgeo">Stadia Outdoor</label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="pnl-contact" class="card panel panel-info">
+      <div class="card-header">
+        <strong>Contact</strong>
+        <span class="pull-right clickable close-icon" data-effect="fadeOut"
+          ><i class="fa fa-times"></i
+        ></span>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          For information about the <strong>Faculty EDM</strong> visit
+          <a href="https://eportal.oauife.edu.ng/home.php"
+            >eportal.oauife.edu.ng</a
+          >. <br /><br />
+          You can contact us via e-mail:
+        </p>
+        <ul>
+          <li>
+            <strong>Oyetunde Adeola :</strong>
+            <a href="mailto:oyetundeaa@gmail.com">oyetundeaa@gmail.com</a>
+          </li>
+          <li>
+            <strong>Oyetunde Adeola:</strong>
+            <a href="mailto:aaoyetunde@student.oauife.edu.ng"
+              >aaoyetunde@student.oauife.edu.ng</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <section class="search-result">
+      <div class="search-basemap" id="map"></div>
+      <div class="search-panel shadow">
+        <div class="close-but">
+          <h3>Direction</h3>
+          <span><img height="15px" src="./images/close.png" alt="" /></span>
+        </div>
+        <p>
+          Sign up/ Login to get directions to residential houses in Quarters
+        </p>
+        <img width="250px" src="./images/mask.png" alt="" />
+        <div>
+          <a class="sign" href="signup.html"
+            >Sign up to continue<span style="margin-left: 5px"
+              ><img height="10px" src="./images/arrow.png" alt="" /></span
+          ></a>
+        </div>
+      </div>
+    </section>
 
     <footer class="fixed-bottom bg-light">
       <div class="container-fluid d-flex justify-content-center">

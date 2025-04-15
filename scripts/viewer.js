@@ -15,7 +15,7 @@ function init(){
         controls: [],
         target: 'map', /* Set the target to the ID of the map*/
         view: mainView,
-        controls: []
+        controls: [],
     });
     
     let baseLayer = getBaseMap("osm");

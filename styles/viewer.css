@@ -1,85 +1,92 @@
 .nav-item a:hover {
-    background-color: rgb(107, 168, 67);
-    color: white;
+  background-color: rgb(107, 168, 67);
+  color: white;
 }
 #map {
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
 }
 footer {
-    padding: 0px;
+  padding: 0px;
 }
- 
+
 footer a {
-    text-decoration: none;
-    color: rgb(94, 94, 94);
-    padding: 5px 20px;
+  text-decoration: none;
+  color: rgb(94, 94, 94);
+  padding: 5px 20px;
 }
- 
+
 footer a:hover {
-    background-color: rgb(107, 168, 67);
-    color: white;
+  background-color: rgb(107, 168, 67);
+  color: white;
 }
 .panel {
-    display: block;
-    position: absolute;
-    height: auto;
-    z-index: 100;
+  display: block;
+  position: absolute;
+  height: auto;
+  z-index: 100;
 }
 .panel-tool {
-    width: 350px;
-    right: 5px;
-    top: 70px;
+  width: 350px;
+  right: 5px;
+  top: 70px;
 }
- 
-.panel-info {
-    max-width: 450px;
-    bottom: 50px;
-}
- 
-#pnl-contact {
-    left: 50%;
-}
- 
-.panel .card-header {
-    background-color: rgb(107, 168, 67);
-    color: white;
-}
- 
-.close-icon {
-    cursor: pointer;
- }
 
-.sign_button{
-    text-decoration: none;
-    color: #fff;
-    background-color: #085118;
-    border-radius: 5px;
-    margin: 0px 10px;
-    padding: 5px 10px;
+.panel-info {
+  max-width: 450px;
+  bottom: 50px;
 }
-.log_button{
-    text-decoration: none;
-    color: #000;
-    border: 1px solid #1a1a1a;
-    border-radius: 5px;
-    margin: 0px 10px;
-    padding: 5px 10px;
+
+#pnl-contact {
+  left: 50%;
+}
+
+.panel .card-header {
+  background-color: rgb(107, 168, 67);
+  color: white;
+}
+
+.close-icon {
+  cursor: pointer;
+}
+
+.sign_button {
+  text-decoration: none;
+  color: #fff;
+  background-color: #085118;
+  border-radius: 5px;
+  margin: 0px 10px;
+  padding: 5px 10px;
+}
+.log_button {
+  text-decoration: none;
+  color: #000;
+  border: 1px solid #1a1a1a;
+  border-radius: 5px;
+  margin: 0px 10px;
+  padding: 5px 10px;
 }
 .search-up {
-    background: transparent;
-    border: 1px solid #8C8C8D;    
-    width: 300px;
-    border-radius: 5px;  
-    margin-top: 7px;    
+  background: transparent;
+  border: 1px solid #8c8c8d;
+  width: 300px;
+  border-radius: 5px;
+  margin-top: 7px;
 }
-.search-up input{
-    border: none;
-    margin-left: 5px;
-    width: 85%;
-    justify-content: center;
-    outline: none;
+.search-up input {
+  border: none;
+  margin-left: 5px;
+  width: 85%;
+  justify-content: center;
+  outline: none;
+}
+
+.container-wrapper {
+  display: flex;
+  justify-content: space-between !important;
+  align-items: center;
+  width: 100%;
 }
