@@ -1,74 +1,75 @@
 .signup-container {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 #index-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-image: url("../images/bg.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-}
- 
-#index-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(255, 255, 255, 0.2);
-}
-#index-info {
-    width: 80%;
-    text-align: center;
-}
-#form-container{
-    width:500px;
-    margin:auto;
-}
-#img-overlay {
-    top: 0;
-    left: 0;
-    height: 100vh;
-    overflow: hidden;
-}
-h1 {
-    background-color: #0A4F15;
-    color: white;
-    padding: 3vw 4vw;
-    font-size: 5vw;
-    clear: both;
-}
- 
-h2 {
-    margin-top: 2vw;
-    font-size: 3vw;
-    color: black;
-}
- 
-strong { font-weight: 800; }
- 
-#index-bg a {
-    display: inline-block;
-    width: auto;
-    transition-property: background-color;
-    transition-duration: 1000ms;
-    background-color: #0A4F15;
-    font-size: 2.5vw;
-    margin: 5vw 1vw 0 1vw;
-    padding: 1vw 2vw;
-    color: white;
-    text-decoration: none;
-    border-radius: 10px;
-}
- 
-a:hover {
-    transition-property: background-color;
-    transition-duration: 1000ms;
-    background-color: rgb(107, 168, 67);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url("../images/bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
+#index-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+#index-info {
+  width: 80%;
+  text-align: center;
+}
+#form-container {
+  width: 500px;
+  margin: auto;
+}
+#img-overlay {
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+h1 {
+  background-color: #0a4f15;
+  color: white;
+  padding: 3vw 4vw;
+  font-size: 5vw;
+  clear: both;
+}
+
+h2 {
+  margin-top: 2vw;
+  font-size: 3vw;
+  color: black;
+}
+
+strong {
+  font-weight: 800;
+}
+
+#index-bg a {
+  display: inline-block;
+  width: auto;
+  transition-property: background-color;
+  transition-duration: 1000ms;
+  background-color: #0a4f15;
+  font-size: 2.5vw;
+  margin: 5vw 1vw 0 1vw;
+  padding: 1vw 2vw;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+}
+
+a:hover {
+  transition-property: background-color;
+  transition-duration: 1000ms;
+  background-color: rgb(107, 168, 67);
+}
