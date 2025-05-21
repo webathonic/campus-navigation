@@ -10,7 +10,7 @@ const mycon = new Pool({
   max: 20, // Max connections
   idleTimeoutMillis: 30000, // Close idle connections after 30s
   connectionTimeoutMillis: 2000, // Fail if connection takes >2s
-  options: "-c search_path=data",
+  // options: "-c search_path=data",
 });
 
 async function queryWithPool() {

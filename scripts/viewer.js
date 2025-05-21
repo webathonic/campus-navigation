@@ -1,19 +1,43 @@
 let mainMap = null;
+let poi_data;
 
-function marker() {
+function poi_call() {
+  axios
+    .get("http://localhost:5000/spatial/plots")
+    .then(function (response) {
+      pois = response.data.data;
+      console.log("poi_data...", pois);
+
+      pois.map((poi) =>
+        mainMap.addLayer(marker(Number(poi.long), Number(poi.lat)))
+      );
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+    .finally(function () {
+      // always executed
+    });
+}
+
+function marker(long, lat) {
   const marker = new ol.Feature({
-    geometry: new ol.geom.Point(ol.proj.fromLonLat([4.5228, 7.5194])),
+    // geometry: new ol.geom.Point(ol.proj.fromLonLat([4.5228, 7.5194])),
+    geometry: new ol.geom.Point(ol.proj.fromLonLat([long, lat])),
+    name: "Null Island",
   });
   marker.setStyle(
     new ol.style.Style({
       image: new ol.style.Icon({
         anchor: [0.5, 1],
-        src: "https://png.pngtree.com/png-vector/20241122/ourmid/pngtree-golden-map-pin-on-a-folded-location-marker-icon-png-image_14531483.png",
+        src: "./images/marker.png",
         // scale: 0.03,
-        scale: 0.1,
+        scale: 0.2,
       }),
     })
   );
+
   const vectorSource = new ol.source.Vector({
     features: [marker],
   });
@@ -45,7 +69,7 @@ function init() {
   let baseLayer = getBaseMap("osm");
 
   mainMap.addLayer(baseLayer);
-  mainMap.addLayer(marker());
+  poi_call();
 }
 
 function getBaseMap(name) {
@@ -101,6 +125,7 @@ function showPanel(id) {
 $(".close-icon").on("click", function () {
   $(this).closest(".card").fadeOut();
 });
+
 function removeLayerByName(map, layer_name) {
   let layerToRemove = null;
   map.getLayers().forEach(function (layer) {
@@ -112,9 +137,9 @@ function removeLayerByName(map, layer_name) {
   map.removeLayer(layerToRemove);
 }
 
-$("input[name=basemap]").click(function (evt) {
+$("input[name=basemap]").click(async function (evt) {
   removeLayerByName(mainMap, "base");
   let baseLayer = getBaseMap(evt.target.value);
   mainMap.addLayer(baseLayer);
-  mainMap.addLayer(marker());
+  poi_call();
 });
