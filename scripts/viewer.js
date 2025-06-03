@@ -1,5 +1,6 @@
 let mainMap = null;
 let poi_data;
+let popover;
 
 function poi_call() {
   axios
@@ -9,7 +10,7 @@ function poi_call() {
       console.log("poi_data...", pois);
 
       pois.map((poi) =>
-        mainMap.addLayer(marker(Number(poi.long), Number(poi.lat)))
+        mainMap.addLayer(marker(Number(poi.long), Number(poi.lat), poi))
       );
     })
     .catch(function (error) {
@@ -21,11 +22,23 @@ function poi_call() {
     });
 }
 
-function marker(long, lat) {
+function marker(long, lat, data) {
+  console.log(data.placepageu);
+  // <img src="${data.placepageu}" alt="${data.name}" />
   const marker = new ol.Feature({
     // geometry: new ol.geom.Point(ol.proj.fromLonLat([4.5228, 7.5194])),
     geometry: new ol.geom.Point(ol.proj.fromLonLat([long, lat])),
-    name: "Null Island",
+    name: `<div>
+    <div id="card-body">
+      <div class="flx">
+        <img src="./images/locationicon.png" height="12px" />
+        <span>${data.name}</span>
+      </div>
+      <img
+        class="imago"
+        src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noPNLdrxDFWLJRpAklywHMe7nKNaa6IC_9LBcumRiYNbBnJhSORBQFP40EqPyeZ5TbeKQaF_0yzpVCrC-QqIHj3myA34XYNTTOgtdHpFlzVIH77OLIa8fADvYZzRi-0qrgYqrIp=w408-h307-k-no"
+      />
+    `,
   });
   marker.setStyle(
     new ol.style.Style({
@@ -69,6 +82,9 @@ function init() {
   let baseLayer = getBaseMap("osm");
 
   mainMap.addLayer(baseLayer);
+
+  showPointDetails(mainMap);
+
   poi_call();
 }
 
@@ -143,3 +159,41 @@ $("input[name=basemap]").click(async function (evt) {
   mainMap.addLayer(baseLayer);
   poi_call();
 });
+
+function disposePopover() {
+  if (popover) {
+    popover.dispose();
+    popover = undefined;
+  }
+}
+
+function showPointDetails(mainMap) {
+  mainMap.on("click", function (evt) {
+    const element = document.getElementById("popup");
+    const popup = new ol.Overlay({
+      element: element,
+      positioning: "bottom-center",
+      stopEvent: false,
+    });
+    mainMap.addOverlay(popup);
+
+    const feature = mainMap.forEachFeatureAtPixel(
+      evt.pixel,
+      function (feature) {
+        return feature;
+      }
+    );
+
+    disposePopover();
+    if (!feature) {
+      return;
+    }
+    popup.setPosition(evt.coordinate);
+    popover = new bootstrap.Popover(element, {
+      placement: "top",
+      html: true,
+      content: feature.get("name"),
+    });
+    popover.show();
+  });
+}
