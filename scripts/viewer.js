@@ -34,10 +34,7 @@ function marker(long, lat, data) {
         <img src="./images/locationicon.png" height="12px" />
         <span>${data.name}</span>
       </div>
-      <img
-        class="imago"
-        src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noPNLdrxDFWLJRpAklywHMe7nKNaa6IC_9LBcumRiYNbBnJhSORBQFP40EqPyeZ5TbeKQaF_0yzpVCrC-QqIHj3myA34XYNTTOgtdHpFlzVIH77OLIa8fADvYZzRi-0qrgYqrIp=w408-h307-k-no"
-      />
+      <img src="${data.imagelink}" alt="${data.name}" />
     `,
   });
   marker.setStyle(

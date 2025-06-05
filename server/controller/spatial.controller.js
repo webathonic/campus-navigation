@@ -2,7 +2,7 @@ const mycon = require("../db");
 
 const getPlotsData = async (req, res) => {
   const query =
-    "SELECT name, placepageu, long,lat, ST_AsGeoJSON(geom) AS geometry FROM data.oau_poi";
+    "SELECT name, placepageu, long,lat, ST_AsGeoJSON(geom) AS geometry, imagelink FROM data.oau_poi";
   mycon.query(query, (err, results, fields) => {
     if (err) {
       console.error("Error executing query:", err);
