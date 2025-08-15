@@ -1,57 +1,117 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
- 
-        <title>Sign up</title>
-        
-        <!-- Load styles of the libraries -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-        <!-- Load own styles -->
-        <link rel="stylesheet" href="./styles/index.css" type="text/css"/>
-        <link rel="stylesheet" href="./styles/signup.css" type="text/css"/>
- 
-        <!-- Define the application icon -->
-        <link rel="icon" href="./images/favicon.png" type="image/png">
-    </head> 
-    <body>
-        <div class="container">
-            <div class="row row-cols-2">
-              <div class="col" id="form-container">
-                <a href="viewer.html">
-                  <img src="./images/favicon.png" alt="LOGO">
-                </a>
-                
-                <h4>Create Your Account</h4>
-                <p>Sign up for a free account for easy campus navigation</p>
-                <form class="signup-form" action="/action_page.php">
-                  <label for="fname">Name:</label><br>
-                  <input type="text" id="fname" name="fname" placeholder="Enter your name"><br>
-                  <label for="email">Email Address:</label><br>
-                  <input type="email" id="email" name="fname" placeholder="Enter your email"><br>
-                  <label for="password">Password:</label><br>
-                  <input type="password" id="Password" name="Password" placeholder="**********"><br>
-                  <div>
-                  <input type="checkbox" id="agree" name="agree" placeholder="agreement">
-                  <label for="agree"> I agree to Uninav's <span>Terms of Policy</span></label></div>
-                  <input type="submit" placeholder="Sign up"><br>
-                </form>
-                <div class="myor">
-                  <div></div>
-                  <span>Or</span>   
-                  <div></div>
-                </div>
-                <button class="google-signup" type="button">
-                  <img height="15" src="./images/google.png">
-                  Sign up with Google</button>
-                <p>Already have an account?<a href="login.html">Login</a></p> 
-              </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-              <div class="col" id="img-overlay">
-                <img src="./images/signup_img.png" alt="">
-              </div>              
+    <title>Sign up</title>
+
+    <!-- Load styles of the libraries -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <!-- Load own styles -->
+    <link rel="stylesheet" href="./styles/index.css" type="text/css" />
+    <link rel="stylesheet" href="./styles/signup.css" type="text/css" />
+
+    <!-- Define the application icon -->
+    <link rel="icon" href="./images/favicon.png" type="image/png" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row row-cols-2">
+        <div class="col" id="form-container">
+          <a href="viewer.html">
+            <img src="./images/favicon.png" alt="LOGO" />
+          </a>
+
+          <h4>Create Your Account</h4>
+          <p>Sign up for a free account for easy campus navigation</p>
+          <form class="signup-form" action="/action_page.php">
+            <label for="fname">Name:</label><br />
+            <input
+              type="text"
+              id="fname"
+              name="fname"
+              placeholder="Enter your name"
+            /><br />
+            <label for="email">Email Address:</label><br />
+            <input
+              type="email"
+              id="email"
+              name="fname"
+              placeholder="Enter your email"
+            /><br />
+            <label for="password">Password:</label><br />
+            <input
+              type="password"
+              id="Password"
+              name="Password"
+              placeholder="**********"
+            /><br />
+            <div>
+              <input
+                type="checkbox"
+                id="agree"
+                name="agree"
+                placeholder="agreement"
+              />
+              <label for="agree">
+                I agree to Uninav's <span>Terms of Policy</span></label
+              >
             </div>
+            <input type="submit" placeholder="Sign up" /><br />
+          </form>
+          <div class="myor">
+            <div></div>
+            <span>Or</span>
+            <div></div>
           </div>
-    </body>
+          <button class="google-signup" type="button" id="googleLogin">
+            <img height="15" src="./images/google.png" />
+            Sign up with Google
+          </button>
+          <p>Already have an account?<a href="login.html">Login</a></p>
+        </div>
+
+        <div class="col" id="img-overlay">
+          <img src="./images/signup_img.png" alt="" />
+        </div>
+      </div>
+    </div>
+  </body>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDxjqRI_nR4rhwOU8CEcyh2TO9DmdIJHik",
+      authDomain: "campus-nav-af42a.firebaseapp.com",
+      projectId: "campus-nav-af42a",
+      storageBucket: "campus-nav-af42a.firebasestorage.app",
+      messagingSenderId: "577667456760",
+      appId: "1:577667456760:web:0791ecb7bb77628ba1a50d",
+      measurementId: "G-JQVTLKJML8",
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+    const facebookProvider = new firebase.auth.FacebookAuthProvider();
+
+    document.getElementById("googleLogin").addEventListener("click", () => {
+      auth
+        .signInWithPopup(googleProvider)
+        .then((result) => console.log(result.user))
+        .catch((error) => console.error(error));
+    });
+  </script>
 </html>
