@@ -141,7 +141,6 @@ function roads_call() {
 }
 
 function marker(long, lat, data) {
-  console.log(data.placepageu);
   // <img src="${data.placepageu}" alt="${data.name}" />
   const marker = new ol.Feature({
     // geometry: new ol.geom.Point(ol.proj.fromLonLat([4.5228, 7.5194])),
@@ -169,11 +168,11 @@ function marker(long, lat, data) {
   const vectorSource = new ol.source.Vector({
     features: [marker],
   });
-  const markeLrayer = new ol.layer.Vector({
+  const markerLayer = new ol.layer.Vector({
     source: vectorSource,
   });
 
-  return markeLrayer;
+  return markerLayer;
 }
 
 function init() {
@@ -203,6 +202,7 @@ function init() {
   roads_call();
   check_page.includes("prompt") ? buildings_call() : "";
   poi_call();
+  myCurrentLocation(mainMap);
 }
 
 function getBaseMap(name) {
@@ -243,6 +243,76 @@ function getBaseMap(name) {
   });
 }
 
+function zoomToLocation(lon, lat) {
+  const view = markerLayer.getView();
+  view.animate({
+    center: ol.proj.fromLonLat([lon, lat]),
+    zoom: 16, // set zoom level
+    duration: 1000, // smooth animation (in ms)
+  });
+}
+
+function myCurrentLocation(mainMap) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        // const lat = 7.5162813;
+        // const lon = 4.5209511;
+        console.log("Latitude:", lat, "Longitude:", lon);
+
+        const marker = new ol.Feature({
+          geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
+          name: `<div>
+    <div id="card-body">
+      <div class="flx">
+        <img src="./images/locationicon.png" height="12px" />
+        <span>Your Location</span>
+      </div>
+    `,
+        });
+        marker.setStyle(
+          new ol.style.Style({
+            image: new ol.style.Icon({
+              anchor: [0.5, 1],
+              src: "./images/locationicon.png",
+              // scale: 0.03,
+              scale: .1,
+            }),
+          })
+        );
+
+        const vectorSource = new ol.source.Vector({
+          features: [marker],
+        });
+        const markerLayer = new ol.layer.Vector({
+          source: vectorSource,
+        });
+
+        mainMap.addLayer(markerLayer);
+        // zoomToLocation(lon, lat);
+
+        map.getView().animate({
+          center: ol.proj.fromLonLat([lon, lat]),
+          zoom: 16,
+          duration: 1000,
+        });
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+      },
+      {
+        enableHighAccuracy: true, // request GPS if available
+        timeout: 10000, // wait up to 10 seconds
+        maximumAge: 0, // do not use cached location
+      }
+    );
+  } else {
+    console.log("Geolocation is not supported by this browser.");
+  }
+}
+
 $(document).ready(function () {
   $(".panel").hide(); // Ensure panels are hidden when the page loads
 });
@@ -277,6 +347,7 @@ $("input[name=basemap]").click(async function (evt) {
   roads_call();
   check_page.includes("prompt") ? buildings_call() : "";
   poi_call();
+  myCurrentLocation(mainMap);
 });
 
 function disposePopover() {
