@@ -1,8 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const { getPlotsData } = require("../controller/spatial.controller");
+const {
+  getPlotsData,
+  getBuildingsData,
+  getRoadsData,
+} = require("../controller/spatial.controller");
 
 router.get("/plots", getPlotsData);
+router.get("/buildings", getBuildingsData);
+router.get("/roads", getRoadsData);
 
 module.exports = router;

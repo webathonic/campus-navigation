@@ -2,16 +2,134 @@ let mainMap = null;
 let poi_data;
 let popover;
 
+const check_page = window.location.pathname.split("/").pop();
+
 function poi_call() {
   axios
     .get("http://localhost:5000/spatial/plots")
-    .then(function (response) {
+    .then((response) => {
       pois = response.data.data;
       console.log("poi_data...", pois);
 
       pois.map((poi) =>
         mainMap.addLayer(marker(Number(poi.long), Number(poi.lat), poi))
       );
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+    .finally(function () {
+      // always executed
+    });
+}
+
+function buildings_poly(points) {
+  const building = {
+    type: "Feature",
+    geometry: {
+      type: "MultiPolygon",
+      coordinates: points,
+    },
+  };
+
+  const vectorSource = new ol.source.Vector({
+    features: new ol.format.GeoJSON().readFeatures(building, {
+      featureProjection: "EPSG:3857", // convert from WGS84 to Web Mercator
+    }),
+  });
+
+  const vectorLayer = new ol.layer.Vector({
+    source: vectorSource,
+    style: new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: "blue",
+        width: 2,
+      }),
+      fill: new ol.style.Fill({
+        color: "rgba(0, 0, 255, 0.3)",
+      }),
+    }),
+  });
+
+  return vectorLayer;
+}
+
+function roads_poly(coords) {
+  const lineCoords = coords.map((c) => ol.proj.fromLonLat(c));
+
+  const road = new ol.Feature({
+    geometry: new ol.geom.LineString(lineCoords),
+    name: "Main Road",
+  });
+
+  // Style the road
+  road.setStyle(
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: "brown",
+        width: 1,
+      }),
+    })
+  );
+
+  // Add to vector source/layer
+  const roadSource = new ol.source.Vector({
+    features: [road],
+  });
+
+  const roadLayer = new ol.layer.Vector({
+    source: roadSource,
+  });
+
+  return roadLayer;
+}
+
+function buildings_call() {
+  axios
+    .get("http://localhost:5000/spatial/buildings")
+    .then((response) => {
+      buildings = response.data.data;
+
+      buildings.map((building) => {
+        const v = building.geometry.split("coordinates").slice(-1);
+        const myformat = v[0]
+          .replace("'", "")
+          .replace(":", "")
+          .replace('"', "")
+          .replace("}", "");
+
+        return mainMap.addLayer(buildings_poly(JSON.parse(myformat)));
+      });
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+    .finally(function () {
+      // always executed
+    });
+}
+
+function roads_call() {
+  axios
+    .get("http://localhost:5000/spatial/roads")
+    .then((response) => {
+      roads = response.data.data;
+      console.log("road_data...", roads);
+
+      roads.map((road) => {
+        const v = road.geometry.split("coordinates").slice(-1);
+        const myformat = v[0]
+          .replace("'", "")
+          .replace(":", "")
+          .replace('"', "")
+          .replace("}", "");
+
+        const myformat_road = JSON.parse(myformat)[0];
+
+        return mainMap.addLayer(roads_poly(myformat_road));
+      });
     })
     .catch(function (error) {
       // handle error
@@ -82,6 +200,8 @@ function init() {
 
   showPointDetails(mainMap);
 
+  roads_call();
+  check_page.includes("prompt") ? buildings_call() : "";
   poi_call();
 }
 
@@ -154,6 +274,8 @@ $("input[name=basemap]").click(async function (evt) {
   removeLayerByName(mainMap, "base");
   let baseLayer = getBaseMap(evt.target.value);
   mainMap.addLayer(baseLayer);
+  roads_call();
+  check_page.includes("prompt") ? buildings_call() : "";
   poi_call();
 });
 

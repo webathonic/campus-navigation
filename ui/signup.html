@@ -100,17 +100,21 @@
       measurementId: "G-JQVTLKJML8",
     };
 
+    let Authorization;
+
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
     const googleProvider = new firebase.auth.GoogleAuthProvider();
-    const facebookProvider = new firebase.auth.FacebookAuthProvider();
 
     document.getElementById("googleLogin").addEventListener("click", () => {
       auth
         .signInWithPopup(googleProvider)
-        .then((result) => console.log(result.user))
+        .then((result) => {
+          const idToken = result.credential.accessToken;
+          console.log({ idToken });
+        })
         .catch((error) => console.error(error));
     });
   </script>
