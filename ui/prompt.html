@@ -106,7 +106,7 @@
               </div>
             </form>
             <li class="nav-item">
-              <a class="nav-link" href="#">Clear results</a>
+              <a class="nav-link" href="viewer.html">Clear results</a>
             </li>
           </ul>
         </div>
@@ -252,5 +252,22 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Own script -->
     <script src="./scripts/viewer.js"></script>
+    <script>
+      const serverUrl = "http://localhost:5000";
+      const searchTerm = window.location?.toString()?.split("?")?.slice(-1);
+      document.getElementById("search").value = searchTerm;
+
+      axios
+        .get(`${serverUrl}/spatial/search/${searchTerm}`)
+        .then((res) => {
+          console.log({ res: res.data });
+          alert(res.data.name_of_oc);
+        })
+        .catch((err) => {
+          if (err.code == 400) {
+            console.message(err.message);
+          }
+        });
+    </script>
   </body>
 </html>

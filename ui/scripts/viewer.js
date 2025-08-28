@@ -3,6 +3,7 @@ let poi_data;
 let popover;
 
 const check_page = window.location.pathname.split("/").pop();
+const idToken = localStorage.getItem("idToken");
 
 function poi_call() {
   axios
@@ -200,7 +201,7 @@ function init() {
   showPointDetails(mainMap);
 
   roads_call();
-  check_page.includes("prompt") ? buildings_call() : "";
+  idToken ? buildings_call() : "";
   poi_call();
   myCurrentLocation(mainMap);
 }
@@ -256,14 +257,15 @@ function myCurrentLocation(mainMap) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-        // const lat = 7.5162813;
-        // const lon = 4.5209511;
+        // const lat = position.coords.latitude;
+        // const lon = position.coords.longitude;
+        const lat = 7.5162813;
+        const lon = 4.5209511;
         console.log("Latitude:", lat, "Longitude:", lon);
+        const center = ol.proj.fromLonLat([lon, lat]);
 
         const marker = new ol.Feature({
-          geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
+          geometry: new ol.geom.Point(center),
           name: `<div>
     <div id="card-body">
       <div class="flx">
@@ -278,7 +280,7 @@ function myCurrentLocation(mainMap) {
               anchor: [0.5, 1],
               src: "./images/locationicon.png",
               // scale: 0.03,
-              scale: .1,
+              scale: 0.1,
             }),
           })
         );
@@ -293,9 +295,9 @@ function myCurrentLocation(mainMap) {
         mainMap.addLayer(markerLayer);
         // zoomToLocation(lon, lat);
 
-        map.getView().animate({
-          center: ol.proj.fromLonLat([lon, lat]),
-          zoom: 16,
+        mainMap.getView().animate({
+          center,
+          zoom: 10,
           duration: 1000,
         });
       },
@@ -309,7 +311,7 @@ function myCurrentLocation(mainMap) {
       }
     );
   } else {
-    console.log("Geolocation is not supported by this browser.");
+    alert("Geolocation is not supported by this browser.");
   }
 }
 
@@ -345,7 +347,7 @@ $("input[name=basemap]").click(async function (evt) {
   let baseLayer = getBaseMap(evt.target.value);
   mainMap.addLayer(baseLayer);
   roads_call();
-  check_page.includes("prompt") ? buildings_call() : "";
+  idToken ? buildings_call() : "";
   poi_call();
   myCurrentLocation(mainMap);
 });

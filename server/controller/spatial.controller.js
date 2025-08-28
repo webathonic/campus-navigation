@@ -9,9 +9,9 @@ const getPlotsData = async (req, res) => {
       console.error("Error executing query:", err);
       return res.status(400).json({ message: err.message, code: err.code });
     }
-    console.log("Query Results:", results);
+    // console.log("Query Results:", results);
 
-    console.log({ data: results.rows });
+    // console.log({ data: results.rows });
 
     return res.status(200).json({ data: results.rows });
   });
@@ -27,9 +27,9 @@ const getBuildingsData = async (req, res) => {
       return res.status(400).json({ message: err.message, code: err.code });
     }
 
-    console.log("Query Results:", results);
+    // console.log("Query Results:", results);
 
-    console.log({ data: results.rows });
+    // console.log({ data: results.rows });
 
     return res.status(200).json({ data: results.rows });
   });
@@ -43,6 +43,27 @@ const getRoadsData = async (req, res) => {
   mycon.query(query, (err, results, fields) => {
     if (err) {
       console.error("Error executing query:", err);
+      return res.status(400).json({ message: err.message, code: err.code });
+    }
+
+    // console.log("Query Results:", results);
+
+    // console.log({ data: results.rows });
+
+    return res.status(200).json({ data: results.rows });
+  });
+
+  console.log("this is get spatial data");
+};
+
+const searchBuildingsData = async (req, res) => {
+  const searchTerm = req.params.searchTerm;
+  console.log({ searchTerm });
+  const query = `SELECT name_of_oc, fac_dept_u, hid, ST_AsGeoJSON(geom) AS geometry FROM data.quarters_wgs84 WHERE SIMILARITY(LOWER(quarters_wgs84.name_of_oc), LOWER(${searchTerm})) > 0.3 ORDER BY gid ASC`;
+
+  mycon.query(query, (err, results, fields) => {
+    if (err) {
+      console.error("Error executing query:", err.message);
       return res.status(400).json({ message: err.message, code: err.code });
     }
 
@@ -60,4 +81,5 @@ module.exports = {
   getPlotsData,
   getBuildingsData,
   getRoadsData,
+  searchBuildingsData,
 };

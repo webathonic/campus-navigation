@@ -100,7 +100,7 @@
       measurementId: "G-JQVTLKJML8",
     };
 
-    const baseUrl = "http://127.0.0.1:5500";
+    const baseUrl = "http://127.0.0.1:5500/ui";
 
     let Authorization;
 
@@ -114,10 +114,13 @@
       auth
         .signInWithPopup(googleProvider)
         .then((result) => {
-          const idToken = result.credential.accessToken;
-          console.log({ idToken });
-          // window.location.href = `${baseUrl}/prompt.html`;
-          window.location.href = `${baseUrl}/ui/prompt.html`;
+          const idToken = result?.credential?.accessToken;
+
+          localStorage.idToken = idToken;
+
+          window.location.href = idToken
+            ? `${baseUrl}/viewer.html`
+            : `${baseUrl}/signup.html`;
         })
         .catch((error) => console.error(error));
     });
