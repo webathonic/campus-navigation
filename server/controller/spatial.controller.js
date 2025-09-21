@@ -59,7 +59,7 @@ const getRoadsData = async (req, res) => {
 const searchBuildingsData = async (req, res) => {
   const searchTerm = req.params.searchTerm;
   console.log({ searchTerm });
-  const query = `SELECT name_of_oc, fac_dept_u, hid, ST_AsGeoJSON(geom) AS geometry FROM data.quarters_wgs84 WHERE SIMILARITY(LOWER(quarters_wgs84.name_of_oc), LOWER(${searchTerm})) > 0.3 ORDER BY gid ASC`;
+  const query = `SELECT gid, name_of_oc, fac_dept_u, hid, ST_AsGeoJSON(geom) AS geometry FROM data.quarters_wgs84 WHERE SIMILARITY(LOWER(quarters_wgs84.name_of_oc), LOWER('${searchTerm}')) > 0.3 ORDER BY gid ASC`;
 
   mycon.query(query, (err, results, fields) => {
     if (err) {

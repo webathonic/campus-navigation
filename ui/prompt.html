@@ -97,12 +97,15 @@
                 <input
                   type="text"
                   id="search"
+                  list="destinations"
                   name="search"
-                  placeholder="Find destination on campus......."
+                  placeholder="Find destination on campus..."
+                  onkeyup="handleKeyUp(event)"
                 />
                 <a href="signup.html">
                   <img height="20" src="./images/search.png" />
                 </a>
+                <datalist id="destinations"></datalist>
               </div>
             </form>
             <li class="nav-item">
@@ -114,10 +117,11 @@
           class="collapse navbar-collapse justify-content-end"
           id="collapsibleNavbar"
         >
-          <div class="form-inline my-2 my-lg-0">
+          <div class="form-inline my-2 my-lg-0" id="auth-div">
             <a class="sign_button" href="signup.html">Sign up</a>
             <a class="log_button" href="login.html">Login</a>
           </div>
+          <div class="avatar" id="avatar"></div>
         </div>
       </div>
     </nav>
@@ -253,21 +257,16 @@
     <!-- Own script -->
     <script src="./scripts/viewer.js"></script>
     <script>
-      const serverUrl = "http://localhost:5000";
-      const searchTerm = window.location?.toString()?.split("?")?.slice(-1);
-      document.getElementById("search").value = searchTerm;
+      if (!idToken) {
+        window.location.href = `${baseUrl}/signup.html`;
+      }
 
-      axios
-        .get(`${serverUrl}/spatial/search/${searchTerm}`)
-        .then((res) => {
-          console.log({ res: res.data });
-          alert(res.data.name_of_oc);
-        })
-        .catch((err) => {
-          if (err.code == 400) {
-            console.message(err.message);
-          }
-        });
+      const searchTerm = window.location?.toString()?.split("?")?.slice(-1);
+      document.getElementById("search").value = searchTerm
+        .toString()
+        .replace(/[^a-zA-Z0-9. ]/g, " ")
+        .replace(/[0-46-9]/g, "");
     </script>
+    <script src="./scripts/helper.js"></script>
   </body>
 </html>

@@ -50,3 +50,14 @@
   width: fit-content;
   font-size: 12px;
 }
+
+.suggestions {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 150px; /* allow scrolling if many results */
+  overflow-y: auto;
+  display: none; /* hidden until JS shows it */
+  z-index: 1000;
+}

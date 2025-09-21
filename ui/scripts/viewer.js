@@ -1,3 +1,4 @@
+let baseUrl = "http://127.0.0.1:5500/ui";
 let mainMap = null;
 let poi_data;
 let popover;
@@ -10,7 +11,7 @@ function poi_call() {
     .get("http://localhost:5000/spatial/plots")
     .then((response) => {
       pois = response.data.data;
-      console.log("poi_data...", pois);
+      // console.log("poi_data...", pois);
 
       pois.map((poi) =>
         mainMap.addLayer(marker(Number(poi.long), Number(poi.lat), poi))
@@ -117,7 +118,7 @@ function roads_call() {
     .get("http://localhost:5000/spatial/roads")
     .then((response) => {
       roads = response.data.data;
-      console.log("road_data...", roads);
+      // console.log("road_data...", roads);
 
       roads.map((road) => {
         const v = road.geometry.split("coordinates").slice(-1);

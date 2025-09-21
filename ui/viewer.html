@@ -105,17 +105,22 @@
               >
             </li>
             <form id="searchForm" onsubmit="handleSearch(event)">
-              <div class="search-up">
+              <div class="search-up" id="searchUp">
                 <input
                   type="text"
                   id="search"
+                  list="destinations"
                   name="search"
+                  onkeyup="handleKeyUp(event)"
                   placeholder="Find destination on campus......."
                 />
                 <button type="submit" class="search-button">
                   <img height="20" src="./images/search.png" />
                 </button>
               </div>
+              <datalist
+                id="destinations"
+              ></datalist>
             </form>
             <li class="nav-item">
               <a class="nav-link" href="viewer.html">Clear results</a>
@@ -127,10 +132,14 @@
           class="collapse navbar-collapse justify-content-end"
           id="collapsibleNavbar"
         >
-          <div class="form-inline my-2 my-lg-0">
+          <div class="form-inline my-2 my-lg-0" id="auth-div">
             <a class="sign_button" href="signup.html">Sign up</a>
             <a class="log_button" href="login.html">Login</a>
             <!-- </div> -->
+          </div>
+          <div class="form-inline my-2 my-lg-0">
+            <!-- Profile Avatar -->
+            <div class="avatar" id="avatar"></div>
           </div>
         </div>
       </div>
@@ -251,20 +260,8 @@
 
     <!-- Own script -->
     <script src="./scripts/viewer.js"></script>
-    <script>
-      const baseUrl = "http://127.0.0.1:5500/ui";
 
-      const handleSearch = (event) => {
-        event.preventDefault();
-
-        const idToken = localStorage.getItem("idToken");
-
-        const search = document.getElementById("search").value;
-
-        window.location.href = idToken
-          ? `${baseUrl}/prompt.html?${search}`
-          : `${baseUrl}/signup.html`;
-      };
-    </script>
+    <script></script>
+    <script src="./scripts/helper.js"></script>
   </body>
 </html>
