@@ -26,13 +26,6 @@
       href="https://cdn.jsdelivr.net/npm/ol@v8.1.0/ol.css"
     />
 
-    <!-- Styles for the application -->
-    <link rel="stylesheet" href="./styles/prompt.css" type="text/css" />
-    <link rel="stylesheet" href="./styles/viewer.css" type="text/css" />
-
-    <!-- Application icon -->
-    <link rel="icon" href="./images/favicon.png" type="image/png" />
-
     <style>
       #card-body {
         width: 175px;
@@ -67,6 +60,14 @@
         margin: 0 auto;
       }
     </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Styles for the application -->
+    <link rel="stylesheet" href="./styles/prompt.css" type="text/css" />
+    <link rel="stylesheet" href="./styles/viewer.css" type="text/css" />
+
+    <!-- Application icon -->
+    <link rel="icon" href="./images/favicon.png" type="image/png" />
 
     <title>OAU | CampusNav</title>
   </head>
@@ -74,9 +75,11 @@
   <body onload="init()">
     <nav class="navbar navbar-expand-lg bg-light navbar-light fixed-top">
       <div class="container-fluid">
-        <a class="navbar-brand" href="index.html"
-          ><strong>OAU</strong> | Quarters Nav</a
-        >
+        <div>
+          <a class="navbar-brand" href="index.html"
+            ><strong>OAU</strong> | Quarters Nav</a
+          >
+        </div>
         <button
           class="navbar-toggler"
           type="button"
@@ -85,46 +88,50 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+
+        <div class="" id="collapsibleNavbar">
           <ul class="navbar-nav">
             <li class="nav-item">
               <a class="nav-link" href="#" onclick="showPanel('pnl-basemap')"
                 >Base layer</a
               >
             </li>
-            <form>
-              <div class="search-up">
+            <form id="searchForm" onsubmit="handleSearch(event)">
+              <div class="search-up" id="searchUp">
                 <input
                   type="text"
                   id="search"
                   list="destinations"
                   name="search"
-                  placeholder="Find destination on campus..."
                   onkeyup="handleKeyUp(event)"
+                  placeholder="Find destination on campus......."
                 />
-                <a href="signup.html">
+                <button type="submit" class="search-button">
                   <img height="20" src="./images/search.png" />
-                </a>
-                <datalist id="destinations"></datalist>
+                </button>
               </div>
+              <datalist id="destinations"></datalist>
             </form>
             <li class="nav-item">
               <a class="nav-link" href="viewer.html">Clear results</a>
             </li>
           </ul>
         </div>
-        <div
-          class="collapse navbar-collapse justify-content-end"
-          id="collapsibleNavbar"
-        >
+
+        <div class="justify-content-end" id="collapsibleNavbar">
           <div class="form-inline my-2 my-lg-0" id="auth-div">
             <a class="sign_button" href="signup.html">Sign up</a>
             <a class="log_button" href="login.html">Login</a>
+            <!-- </div> -->
           </div>
-          <div class="avatar" id="avatar"></div>
+          <div class="form-inline my-2 my-lg-0">
+            <!-- Profile Avatar -->
+            <div class="avatar" id="avatar"></div>
+          </div>
         </div>
       </div>
     </nav>
+
     <div id="pnl-basemap" class="card panel panel-tool">
       <div class="card-header">
         Base layer
@@ -215,22 +222,72 @@
       </div>
     </div>
 
-    <section class="search-result">
-      <div class="search-basemap" id="map"><div id="popup"></div></div>
-      <div class="search-panel shadow">
-        <div class="close-but">
-          <h3>Direction</h3>
-          <span><img height="15px" src="./images/close.png" alt="" /></span>
+    <section class="search-result flex flex-col md:flex-row h-screen">
+      <!-- Map container -->
+      <div class="search-basemap flex-1 relative" id="map">
+        <div id="popup"></div>
+      </div>
+
+      <!-- Information panel -->
+      <div
+        class="search-panel shadow bg-white w-full md:w-96 p-6 overflow-y-auto"
+      >
+        <!-- Header -->
+        <div class="flex justify-between items-center border-b pb-3 mb-4">
+          <h3 class="text-lg font-semibold text-gray-800">Building Details</h3>
+          <button>
+            <img height="15px" src="./images/close.png" alt="close" />
+          </button>
         </div>
-        <p>
-          Sign up/ Login to get directions to residential houses in Quarters
+
+        <!-- Description -->
+        <p class="text-sm text-gray-600 mb-4">
+          Information about the selected building inside the quarters.
         </p>
-        <img width="250px" src="./images/mask.png" alt="" />
-        <div>
-          <a class="sign" href="signup.html"
-            >Sign up to continue<span style="margin-left: 5px"
-              ><img height="10px" src="./images/arrow.png" alt="" /></span
-          ></a>
+
+        <!-- Building Info -->
+        <div class="space-y-3">
+          <div>
+            <span class="block text-xs text-gray-500">Occupant:</span>
+            <span class="text-base font-medium text-gray-800" id="occupant"
+              >Dr Keita</span
+            >
+          </div>
+          <div>
+            <span class="block text-xs text-gray-500">House ID: </span>
+            <span class="text-base font-medium text-gray-800" id="hid"
+              >RD14 L19</span
+            >
+          </div>
+          <div>
+            <span class="block text-xs text-gray-500"
+              >Faculty/Department:
+            </span>
+            <span class="text-base font-medium text-gray-800" id="department"
+              >RECTAS</span
+            >
+          </div>
+          <div>
+            <span class="block text-xs text-gray-500">GID</span>
+            <span class="text-base font-medium text-gray-800" id="gid">37</span>
+          </div>
+        </div>
+
+        <!-- Action -->
+        <div class="mt-6">
+          <button
+            class="sign inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md shadow"
+            href="signup.html"
+            onclick="handleRouteToBuilding()"
+          >
+            Show me the way
+            <img
+              class="ml-2"
+              height="12px"
+              src="./images/arrow.png"
+              alt="arrow"
+            />
+          </button>
         </div>
       </div>
     </section>
@@ -246,6 +303,7 @@
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"
     ></script>
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -255,17 +313,186 @@
     <!--Script for api call-->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Own script -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./scripts/viewer.js"></script>
     <script>
       if (!idToken) {
         window.location.href = `${baseUrl}/signup.html`;
       }
 
+      serverUrl = "http://localhost:5000";
+
+      let myBuildingData = null;
+
       const searchTerm = window.location?.toString()?.split("?")?.slice(-1);
+      const term = searchTerm[0].split("(")[1].replace(")", "");
       document.getElementById("search").value = searchTerm
         .toString()
         .replace(/[^a-zA-Z0-9. ]/g, " ")
         .replace(/[0-46-9]/g, "");
+
+      // const getSearchDetails = (term) => {
+      if (term) {
+        init();
+        axios
+          .get(`${serverUrl}/spatial/get-building/${term}`)
+          .then((res) => {
+            const data = res.data.data;
+
+            const building = data[0];
+            myBuildingData = data[0];
+
+            document.getElementById("occupant").innerHTML = building.name_of_oc;
+            document.getElementById("hid").innerHTML = building.hid;
+            document.getElementById("gid").innerHTML = building.gid;
+            document.getElementById("department").innerHTML =
+              building.fac_dept_u;
+
+            // Clear old destinations
+            const destinations = document.getElementById("destinations");
+            destinations.innerHTML = building.name_of_oc + "'s place";
+
+            if (data.length === 0) {
+              destinations.innerHTML = `<option value="Not Found"></option>`;
+              return;
+            }
+
+            // Loop through each building
+            data.forEach((building) => {
+              console.log({ building });
+
+              // Parse building geometry (assuming GeoJSON format in "geometry" field)
+              let geom = building.geometry;
+              if (typeof geom === "string") {
+                geom = JSON.parse(geom); // convert to JSON if string
+              }
+
+              // Create feature from geometry
+              const feature = new ol.format.GeoJSON().readFeature(geom, {
+                dataProjection: "EPSG:4326",
+                featureProjection: "EPSG:3857",
+              });
+
+              // Style in yellow
+              feature.setStyle(
+                new ol.style.Style({
+                  stroke: new ol.style.Stroke({
+                    color: "yellow",
+                    width: 2,
+                  }),
+                  fill: new ol.style.Fill({
+                    color: "rgba(255, 255, 0, 0.4)", // semi-transparent yellow
+                  }),
+                })
+              );
+
+              // Add vector layer
+              const vectorSource = new ol.source.Vector({
+                features: [feature],
+              });
+
+              const vectorLayer = new ol.layer.Vector({
+                source: vectorSource,
+              });
+
+              mainMap.addLayer(vectorLayer);
+
+              // Zoom to building extent
+              mainMap.getView().fit(vectorSource.getExtent(), {
+                padding: [50, 50, 50, 50],
+                duration: 1000,
+              });
+
+              // Add to destinations dropdown
+              destinations.innerHTML += `<option value="${building.name_of_oc} (${building.gid})"></option>`;
+            });
+          })
+          .catch((err) => {
+            console.error(err.message);
+          });
+      }
+
+      const routeLayer = new ol.layer.Vector({
+        source: new ol.source.Vector(),
+      });
+
+      async function getRoute(startLon, startLat, endLon, endLat) {
+        try {
+          // Send request to backend API
+          const response = await axios.get(
+            `${serverUrl}/spatial/get-building-route`,
+            {
+              params: {
+                // startLon: startLon,
+                // startLat: startLat,
+                // endLon: endLon,
+                // endLat: endLat,
+                startLon: 4.5347581317,
+                startLat: 7.52638642,
+                endLon: 4.53475813175,
+                endLat: 7.526386424,
+              },
+            }
+          );
+
+          const geojson = response.data;
+
+          // Convert GeoJSON to OpenLayers feature
+          const routeFeature = new ol.format.GeoJSON().readFeature(geojson, {
+            dataProjection: "EPSG:4326",
+            featureProjection: "EPSG:3857",
+          });
+
+          // Style for the route
+          routeFeature.setStyle(
+            new ol.style.Style({
+              stroke: new ol.style.Stroke({
+                color: "#ffd000",
+                width: 4,
+              }),
+            })
+          );
+
+          // Clear old route and add new one
+          routeLayer.getSource().clear();
+          routeLayer.getSource().addFeature(routeFeature);
+
+          // Zoom to route extent
+          map.getView().fit(routeLayer.getSource().getExtent(), {
+            padding: [50, 50, 50, 50],
+          });
+        } catch (err) {
+          console.error("Error fetching route:", err);
+        }
+      }
+
+      mainMap.addLayer(routeLayer);
+
+      const handleRouteToBuilding = () => {
+        console.log({ myBuildingData: JSON.parse(myBuildingData.geometry) });
+
+        const geomFeature = {
+          type: "Feature",
+          geometry: JSON.parse(myBuildingData.geometry),
+          properties: {},
+        };
+
+        const centroid = turf.centroid(geomFeature);
+        const [destLon, destLat] = centroid.geometry.coordinates;
+
+        console.log({ centroid, destLon, destLat });
+
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            const myLat = position.coords.latitude;
+            const myLon = position.coords.longitude;
+
+            console.log("Your location:", myLat, myLon);
+
+            getRoute(myLon, myLat, destLon, destLat);
+          });
+        }
+      };
     </script>
     <script src="./scripts/helper.js"></script>
   </body>

@@ -26,7 +26,7 @@ function poi_call() {
     });
 }
 
-function buildings_poly(points) {
+function buildings_poly(points, identify = false) {
   const building = {
     type: "Feature",
     geometry: {
@@ -45,11 +45,11 @@ function buildings_poly(points) {
     source: vectorSource,
     style: new ol.style.Style({
       stroke: new ol.style.Stroke({
-        color: "blue",
+        color: identify ? "rgba(189, 234, 64, 1)" : "blue",
         width: 2,
       }),
       fill: new ol.style.Fill({
-        color: "rgba(0, 0, 255, 0.3)",
+        color: identify ? "rgba(189, 234, 64, 1)" : "rgba(0, 0, 255, 0.3)",
       }),
     }),
   });
@@ -261,7 +261,7 @@ function myCurrentLocation(mainMap) {
         // const lat = position.coords.latitude;
         // const lon = position.coords.longitude;
         const lat = 7.5162813;
-        const lon = 4.5209511;
+        const lon = i;
         console.log("Latitude:", lat, "Longitude:", lon);
         const center = ol.proj.fromLonLat([lon, lat]);
 
