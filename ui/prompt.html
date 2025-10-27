@@ -277,8 +277,8 @@
         <div class="mt-6">
           <button
             class="sign inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md shadow"
+            id="getRouteBtn"
             href="signup.html"
-            onclick="handleRouteToBuilding()"
           >
             Show me the way
             <img
@@ -314,8 +314,10 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Own script -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
     <script src="./scripts/viewer.js"></script>
     <script>
+      console.log({ idToken });
       if (!idToken) {
         window.location.href = `${baseUrl}/signup.html`;
       }
@@ -323,6 +325,11 @@
       serverUrl = "http://localhost:5000";
 
       let myBuildingData = null;
+      // const LAT = 7.5162813;
+      // const LON = 4.553;
+
+      const ORS_API_KEY =
+        "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjczZTcwMDRhYmQ2ODQ3MmI5Zjg1Mjk5NzJlNWJjOWUwIiwiaCI6Im11cm11cjY0In0=";
 
       const searchTerm = window.location?.toString()?.split("?")?.slice(-1);
       const term = searchTerm[0].split("(")[1].replace(")", "");
@@ -364,7 +371,7 @@
               // Parse building geometry (assuming GeoJSON format in "geometry" field)
               let geom = building.geometry;
               if (typeof geom === "string") {
-                geom = JSON.parse(geom); // convert to JSON if string
+                geom = JSON.parse(geom); // convertf to JSON if string
               }
 
               // Create feature from geometry
@@ -468,31 +475,103 @@
 
       mainMap.addLayer(routeLayer);
 
-      const handleRouteToBuilding = () => {
-        console.log({ myBuildingData: JSON.parse(myBuildingData.geometry) });
+      // --- Vector layer for route ---
+      const routeSource = new ol.source.Vector();
+      const n_routeLayer = new ol.layer.Vector({
+        source: routeSource,
+        style: new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: "yellow",
+            width: 4,
+          }),
+        }),
+      });
+      mainMap.addLayer(n_routeLayer);
 
-        const geomFeature = {
-          type: "Feature",
-          geometry: JSON.parse(myBuildingData.geometry),
-          properties: {},
-        };
+      // --- Get current location ---
+      function getCurrentLocation() {
+        return new Promise((resolve, reject) => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (pos) => {
+                const coords = [pos.coords.longitude, pos.coords.latitude];
 
-        const centroid = turf.centroid(geomFeature);
-        const [destLon, destLat] = centroid.geometry.coordinates;
+                resolve(coords);
+              },
+              (err) => reject(err)
+            );
+          } else {
+            reject("Geolocation not supported");
+          }
+        });
+      }
 
-        console.log({ centroid, destLon, destLat });
-
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition((position) => {
-            const myLat = position.coords.latitude;
-            const myLon = position.coords.longitude;
-
-            console.log("Your location:", myLat, myLon);
-
-            getRoute(myLon, myLat, destLon, destLat);
+      // --- Fetch route from ORS ---
+      async function getRoute(start, end) {
+        try {
+          const url =
+            "https://api.openrouteservice.org/v2/directions/driving-car";
+          const res = await axios.get(url, {
+            params: {
+              api_key: ORS_API_KEY,
+              start: `${start[0]},${start[1]}`,
+              end: `${end[0]},${end[1]}`,
+            },
           });
+
+          const route = res.data.features[0].geometry;
+
+          // Convert GeoJSON LineString to OpenLayers feature
+          const routeFeature = new ol.format.GeoJSON().readFeature(route, {
+            dataProjection: "EPSG:4326",
+            featureProjection: "EPSG:3857",
+          });
+
+          routeSource.clear();
+          routeSource.addFeature(routeFeature);
+
+          // Zoom to route extent
+          mainMap.getView().fit(routeSource.getExtent(), {
+            padding: [50, 50, 50, 50],
+            duration: 1000,
+          });
+        } catch (err) {
+          console.error("Routing error:", err);
+          alert("Error fetching route. Check console for details.");
         }
-      };
+      }
+
+      // --- Button click ---
+      document
+        .getElementById("getRouteBtn")
+        .addEventListener("click", async () => {
+          try {
+            const currentLocation = await getCurrentLocation(); // [lon, lat]
+            // const currentLocation = [LON, LAT]; // [lon, lat]
+            // const destination = [4.553, 7.519]; // Example destination (building centroid)
+
+            console.log({
+              myBuildingData: JSON.parse(myBuildingData.geometry),
+            });
+
+            const geomFeature = {
+              type: "Feature",
+              geometry: JSON.parse(myBuildingData.geometry),
+              properties: {},
+            };
+
+            const centroid = turf.centroid(geomFeature);
+            const destination = centroid.geometry.coordinates;
+
+            console.log({ currentLocation });
+
+            console.log("From:", currentLocation, "To:", destination);
+
+            getRoute(currentLocation, destination);
+          } catch (err) {
+            alert("Unable to get location: " + err.message);
+          }
+        });
     </script>
     <script src="./scripts/helper.js"></script>
   </body>

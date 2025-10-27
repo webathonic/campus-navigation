@@ -30,26 +30,28 @@
 
           <h4>Create Your Account</h4>
           <p>Sign up for a free account for easy campus navigation</p>
-          <form class="signup-form" action="/action_page.php">
-            <label for="fname">Name:</label><br />
+          <form class="signup-form" onsubmit="signup(event)">
+            <!-- <label for="fname">Name:</label><br />
             <input
               type="text"
               id="fname"
               name="fname"
               placeholder="Enter your name"
-            /><br />
+            /><br /> -->
             <label for="email">Email Address:</label><br />
             <input
               type="email"
               id="email"
-              name="fname"
+              required
+              name="email"
               placeholder="Enter your email"
             /><br />
             <label for="password">Password:</label><br />
             <input
               type="password"
-              id="Password"
-              name="Password"
+              id="password"
+              name="password"
+              required
               placeholder="**********"
             /><br />
             <div>
@@ -57,6 +59,7 @@
                 type="checkbox"
                 id="agree"
                 name="agree"
+                required
                 placeholder="agreement"
               />
               <label for="agree">
@@ -87,42 +90,36 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script> -->
+  <script src="./scripts/index.js"></script>
 
   <script>
-    // Your Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyDxjqRI_nR4rhwOU8CEcyh2TO9DmdIJHik",
-      authDomain: "campus-nav-af42a.firebaseapp.com",
-      projectId: "campus-nav-af42a",
-      storageBucket: "campus-nav-af42a.firebasestorage.app",
-      messagingSenderId: "577667456760",
-      appId: "1:577667456760:web:0791ecb7bb77628ba1a50d",
-      measurementId: "G-JQVTLKJML8",
-    };
-
-    const baseUrl = "http://127.0.0.1:5500/ui";
-
     let Authorization;
+    const signup = async (event) => {
+      event.preventDefault();
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-    const googleProvider = new firebase.auth.GoogleAuthProvider();
+      console.log({ email, password });
 
-    document.getElementById("googleLogin").addEventListener("click", () => {
-      auth
-        .signInWithPopup(googleProvider)
-        .then((result) => {
-          const idToken = result?.credential?.accessToken;
+      try {
+        const userCredential = await auth.createUserWithEmailAndPassword(
+          email,
+          password
+        );
+        console.log("User signed up:", userCredential.user);
+        const accessToken = userCredential.user.Aa;
 
-          localStorage.idToken = idToken;
+        localStorage.idToken = accessToken;
 
-          window.location.href = idToken
-            ? `${baseUrl}/viewer.html`
-            : `${baseUrl}/signup.html`;
-        })
-        .catch((error) => console.error(error));
-    });
+        // console.log({ myToken });
+
+        window.location.href = `${baseUrl}/login.html`;
+      } catch (error) {
+        console.error(error.message);
+        alert(error.message);
+      }
+    };
   </script>
 </html>

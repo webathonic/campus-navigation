@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Shortest Path Demo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol/ol.css" />
+    <script src="https://cdn.jsdelivr.net/npm/ol/dist/ol.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div id="map" style="width: 100%; height: 100vh"></div>
+
+    <script>
+      const map = new ol.Map({
+        target: "map",
+        layers: [new ol.layer.Tile({ source: new ol.source.OSM() })],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([4.545, 7.53]),
+          zoom: 15,
+        }),
+      });
+
+      // Fetch shortest route from backend
+      axios
+        .get("http://localhost:5000/route", {
+          params: { lon1: 4.5405, lat1: 7.528, building: "Admin Building" },
+        })
+        .then((res) => {
+          const features = res.data.route.map((r) =>
+            new ol.format.GeoJSON().readFeature(r.geom, {
+              featureProjection: "EPSG:3857",
+            })
+          );
+          const routeLayer = new ol.layer.Vector({
+            source: new ol.source.Vector({ features }),
+            style: new ol.style.Style({
+              stroke: new ol.style.Stroke({
+                color: "yellow",
+                width: 4,
+              }),
+            }),
+          });
+          map.addLayer(routeLayer);
+        })
+        .catch(console.error);
+    </script>
+  </body>
+</html>

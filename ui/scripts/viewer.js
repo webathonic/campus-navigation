@@ -3,6 +3,22 @@ let mainMap = null;
 let poi_data;
 let popover;
 
+let LAT = 7.5162813;
+let LON = 4.553;
+
+
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      LON = pos.coords.longitude;
+      LAT = pos.coords.latitude;
+    },
+    (err) => reject(err)
+  );
+} else {
+  reject("Geolocation not supported");
+}
+
 const check_page = window.location.pathname.split("/").pop();
 const idToken = localStorage.getItem("idToken");
 
@@ -182,9 +198,9 @@ function init() {
   let mainView = new ol.View({
     extent: [500000, 830000, 510000, 850000], // Adjusted extent for OAU campus
     center: [503397.87, 839120.93], // OAU campus center
-    minZoom: 2,
-    maxZoom: 20, // Increased max zoom for better details
-    zoom: 10, // Adjusted initial zoom level
+    minZoom: -200,
+    maxZoom: 50, // Increased max zoom for better details
+    zoom: 50, // Adjusted initial zoom level
   });
 
   // Initialize the map
@@ -258,10 +274,10 @@ function myCurrentLocation(mainMap) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        // const lat = position.coords.latitude;
-        // const lon = position.coords.longitude;
-        const lat = 7.5162813;
-        const lon = i;
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        // const lat = LAT;
+        // const lon = LON;
         console.log("Latitude:", lat, "Longitude:", lon);
         const center = ol.proj.fromLonLat([lon, lat]);
 
