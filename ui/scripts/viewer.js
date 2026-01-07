@@ -1,11 +1,10 @@
-let baseUrl = "http://127.0.0.1:5500/ui";
+let baseUrl = "http://127.0.0.1:5501/ui";
 let mainMap = null;
 let poi_data;
 let popover;
 
 let LAT = 7.5162813;
 let LON = 4.553;
-
 
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(

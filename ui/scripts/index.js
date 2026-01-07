@@ -1,5 +1,5 @@
 // Your Firebase config
-const baseUrl = "http://127.0.0.1:5500/ui";
+const baseUrl = "http://127.0.0.1:5501/ui";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDxjqRI_nR4rhwOU8CEcyh2TO9DmdIJHik",
@@ -31,4 +31,3 @@ document.getElementById("googleLogin").addEventListener("click", () => {
     })
     .catch((error) => alert(error));
 });
-
