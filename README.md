@@ -103,7 +103,7 @@ The developed WebGIS application serves as a valuable navigation and spatial inf
 
 ---
 
-## 👤 Authors
+## 👤 Author
 **Oyetunde Anthonia**
 B.Sc. Surveying & Geoinformatics  
 Obafemi Awolowo University  
