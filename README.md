@@ -44,7 +44,7 @@ All datasets were cleaned, structured, and integrated into a **geodatabase** to 
 - Authentication Systems with Firebase
 - API creation and implementation on the ui
 
-### Backend / GIS Logic (Anthonia)
+### Database / Data Storage (Anthonia)
 - Database setup and creation
 - Importation of locational and attribute data
 - Plugins (e.g PostGIS) installations
