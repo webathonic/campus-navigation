@@ -29,7 +29,7 @@ All datasets were cleaned, structured, and integrated into a **geodatabase** to 
 
 ## 🧱 System Architecture
 
-### Frontend (Anthonia)
+### Frontend (Adeola)
 - Built using **HTML, CSS, and JavaScript**
 - Direct implementation of platform visuals from figma to web
 - Responsive and user-friendly interface
@@ -44,7 +44,7 @@ All datasets were cleaned, structured, and integrated into a **geodatabase** to 
 - Authentication Systems with Firebase
 - API creation and implementation on the ui
 
-### Database / Data Storage (Anthonia)
+### Database / Data Storage (Adeola)
 - Database setup and creation
 - Importation of locational and attribute data
 - Plugins (e.g PostGIS) installations
