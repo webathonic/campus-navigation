@@ -29,15 +29,25 @@ All datasets were cleaned, structured, and integrated into a **geodatabase** to 
 
 ## 🧱 System Architecture
 
-### Frontend
+### Frontend (Anthonia)
 - Built using **HTML, CSS, and JavaScript**
+- Direct implementation of platform visuals from figma to web
 - Responsive and user-friendly interface
+- Map displays using OSM data and Leaflet
 - Interactive map visualization and controls
+- JS library integrations with script tags
 
-### Backend / GIS Logic
+### Backend / GIS Logic (Jeremiah)
 - Geodatabase-driven spatial queries
 - Routing algorithms for shortest and optimal paths
 - Efficient handling of spatial and attribute data
+- Authentication Systems with Firebase
+- API creation and implementation on the ui
+
+### Backend / GIS Logic (Anthonia)
+- Database setup and creation
+- Importation of locational and attribute data
+- Plugins (e.g PostGIS) installations
 
 ---
 
